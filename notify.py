@@ -133,6 +133,8 @@ if __name__ == '__main__':
         notify_write_weekly_report()
     elif IS_FIVE_THIRTY_PM:
         notify_weekend()
+        notify_schedule()
+        notify_wirte_misson_management()
 
     if MESSAGE_LIST:
         token = ''
