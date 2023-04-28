@@ -69,13 +69,23 @@ def notify_wirte_misson_management():
         item.content = '請需要撰寫任務管理的同仁於 20 號前完成，不要跟錢錢過意不去。'
         MESSAGE_LIST.append(item)
 
+def notify_schedule():
+    """排班
+    每個月的23跟25號提醒"""
+    if TODAY.day in [23, 25]:
+        item = MessageItem()
+        item.label = '➭ 排班排班'
+        item.content = '請同仁於 25 號前完成排班。'
+        MESSAGE_LIST.append(item)
+
 
 def notify_booking_lunch():
     """午餐預約"""
-    item = MessageItem()
-    item.label = '➭ 訂午餐'
-    item.content = '十點嚕，記得訂午餐，有團購的話不要理我。'
-    MESSAGE_LIST.append(item)
+    if TODAY.weekday() in [0, 1, 2, 3, 4]:
+        item = MessageItem()
+        item.label = '➭ 訂午餐'
+        item.content = '十點嚕，記得訂午餐，有團購的話不要理我。'
+        MESSAGE_LIST.append(item)
 
 
 def notify_weekend():
@@ -116,6 +126,7 @@ if __name__ == '__main__':
         notify_meeting_day()
         notify_write_weekly_report()
         notify_wirte_misson_management()
+        notify_schedule()
     elif IS_TEN_AM:
         notify_booking_lunch()
     elif IS_ONE_THIRTY_PM:
