@@ -1,5 +1,5 @@
 import requests
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 
 TODAY = date.today()
 
@@ -20,23 +20,38 @@ class MessageItem():
         self.content = content
 
 
+def get_second_thursday_of_month(year: int, month: int) -> date:
+    """取得每個月的第二個禮拜四"""
+    first_day_of_month = date(year, month, 1)
+    first_thursday_of_month = first_day_of_month + timedelta(days=((3 - first_day_of_month.weekday()) % 7))
+    second_thursday_of_month = first_thursday_of_month + timedelta(days=7)
+
+    return second_thursday_of_month.strftime('%Y-%m-%d')
+
+
+def get_the_second_thursday_of_each_month_of_the_year(year: int) -> list:
+    """取得該年度每個月的第二個禮拜四"""
+    second_thursday_of_each_month_of_the_year = []
+
+    for month in range(1, 13):
+        second_thursday_of_month = get_second_thursday_of_month(year, month)
+        second_thursday_of_each_month_of_the_year.append(second_thursday_of_month)
+
+    return second_thursday_of_each_month_of_the_year
+
+
+def meething_day_schedule():
+    """行政小小會議要做什麼"""
+    if (TODAY.month % 2 == 1):
+        print('工作回顧')
+    else:
+        print('技術分享')
+
+
 def notify_meeting_day():
     """行政小小會議
     每個月的第二個禮拜四前兩天提醒"""
-    meeting_list = [
-        '2023-01-12',
-        '2023-02-09',
-        '2023-03-09',
-        '2023-04-13',
-        '2023-05-11',
-        '2023-06-15',
-        '2023-07-13',
-        '2023-08-10',
-        '2023-09-14',
-        '2023-10-12',
-        '2023-11-09',
-        '2023-12-14',
-    ]
+    meeting_list = get_the_second_thursday_of_each_month_of_the_year(date.today().year)
     for meeting_date_str in meeting_list:
         meeting_date = datetime.strptime(
             meeting_date_str, '%Y-%m-%d').date()
@@ -46,7 +61,7 @@ def notify_meeting_day():
         if diff == 2:
             item = MessageItem()
             item.label = '➭ 行政小小會議'
-            item.content = f'本週將於 {meeting_date} 舉行行政小小會議，若有同仁該時段有要事請提出並告知佩株學姐，謝謝。'
+            item.content = f'本週將於 {meeting_date} 舉行行政小小會議，若有同仁該時段有要事請提出，謝謝。\n 另外，本月將進行 {meething_day_schedule()}，再請同仁準備！'
             MESSAGE_LIST.append(item)
 
 
@@ -76,6 +91,16 @@ def notify_schedule():
         item = MessageItem()
         item.label = '➭ 排班排班'
         item.content = '請同仁於 25 號前完成排班。'
+        MESSAGE_LIST.append(item)
+
+
+def notify_edit_working_hours():
+    """時數異動期限
+    每個月的25跟27號提醒"""
+    if TODAY.day in [25, 27]:
+        item = MessageItem()
+        item.label = '➭ 員工改班、積補時數、忘免刷申請時限'
+        item.content = '當月1~27日之出勤異動應於27日前完成，並請順便檢查當月是否有忘卡！！'
         MESSAGE_LIST.append(item)
 
 
@@ -127,6 +152,7 @@ if __name__ == '__main__':
         notify_write_weekly_report()
         notify_wirte_misson_management()
         notify_schedule()
+        notify_edit_working_hours()
     elif IS_TEN_AM:
         notify_booking_lunch()
     elif IS_ONE_THIRTY_PM:
@@ -134,6 +160,7 @@ if __name__ == '__main__':
     elif IS_FIVE_THIRTY_PM:
         notify_weekend()
         notify_schedule()
+        notify_edit_working_hours()
         notify_wirte_misson_management()
 
     if MESSAGE_LIST:
