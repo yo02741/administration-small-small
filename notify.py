@@ -40,12 +40,12 @@ def get_the_second_thursday_of_each_month_of_the_year(year: int) -> list:
     return second_thursday_of_each_month_of_the_year
 
 
-def meething_day_schedule():
+def meeting_day_schedule():
     """行政小小會議要做什麼"""
     if (TODAY.month % 2 == 1):
-        print('工作回顧')
+        return '工作回顧'
     else:
-        print('技術分享')
+        return '技術分享'
 
 
 def notify_meeting_day():
@@ -61,7 +61,7 @@ def notify_meeting_day():
         if diff == 2:
             item = MessageItem()
             item.label = '➭ 行政小小會議'
-            item.content = f'本週將於 {meeting_date} 舉行行政小小會議，若有同仁該時段有要事請提出，謝謝。\n 另外，本月將進行 {meething_day_schedule()}，再請同仁準備！'
+            item.content = f'本週將於 {meeting_date} 舉行行政小小會議，若有同仁該時段有要事請提出，謝謝。\n 另外，本月將進行 {meeting_day_schedule()}，再請同仁準備！'
             MESSAGE_LIST.append(item)
 
 
