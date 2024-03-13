@@ -20,24 +20,35 @@ class MessageItem():
         self.content = content
 
 
-def get_second_thursday_of_month(year: int, month: int) -> date:
-    """取得每個月的第二個禮拜四"""
-    first_day_of_month = date(year, month, 1)
-    first_thursday_of_month = first_day_of_month + timedelta(days=((3 - first_day_of_month.weekday()) % 7))
-    second_thursday_of_month = first_thursday_of_month + timedelta(days=7)
+def get_nearest_thursday_of_month(year: int, month: int) -> str:
+    """取得每個月最接近15號的週四"""
+    fifteenth_of_month = date(year, month, 15)
 
-    return second_thursday_of_month.strftime('%Y-%m-%d')
+    # 計算15號的前一週四和後一週四
+    prev_thursday = fifteenth_of_month - timedelta(days=fifteenth_of_month.weekday() + 3)
+    next_thursday = fifteenth_of_month + timedelta(days=3 - fifteenth_of_month.weekday())
+
+    # 比較前一週四和後一週四與15號的距離,取較近的那一天
+    prev_diff = abs((fifteenth_of_month - prev_thursday).days)
+    next_diff = abs((next_thursday - fifteenth_of_month).days)
+
+    if prev_diff < next_diff:
+        nearest_thursday_of_month = prev_thursday
+    else:
+        nearest_thursday_of_month = next_thursday
+
+    return nearest_thursday_of_month.strftime('%Y-%m-%d')
 
 
-def get_the_second_thursday_of_each_month_of_the_year(year: int) -> list:
-    """取得該年度每個月的第二個禮拜四"""
-    second_thursday_of_each_month_of_the_year = []
+def get_nearest_thursday_of_each_month_of_the_year(year: int) -> list:
+    """取得該年度每個月最接近15號的週四"""
+    nearest_thursday_of_each_month_of_the_year = []
 
     for month in range(1, 13):
-        second_thursday_of_month = get_second_thursday_of_month(year, month)
-        second_thursday_of_each_month_of_the_year.append(second_thursday_of_month)
+        nearest_thursday_of_month = get_nearest_thursday_of_month(year, month)
+        nearest_thursday_of_each_month_of_the_year.append(nearest_thursday_of_month)
 
-    return second_thursday_of_each_month_of_the_year
+    return nearest_thursday_of_each_month_of_the_year
 
 
 def meeting_day_schedule():
@@ -50,8 +61,8 @@ def meeting_day_schedule():
 
 def notify_meeting_day():
     """行政小小會議
-    每個月的第二個禮拜四前兩天提醒"""
-    meeting_list = get_the_second_thursday_of_each_month_of_the_year(date.today().year)
+    每個月最接近15號的週四前兩天提醒"""
+    meeting_list = get_nearest_thursday_of_each_month_of_the_year(date.today().year)
     for meeting_date_str in meeting_list:
         meeting_date = datetime.strptime(
             meeting_date_str, '%Y-%m-%d').date()
@@ -100,7 +111,7 @@ def notify_edit_working_hours():
     if TODAY.day in [25, 27]:
         item = MessageItem()
         item.label = '➭ 員工改班、積補時數、忘免刷申請時限'
-        item.content = '當月1~27日之出勤異動應於27日前完成，並請順便檢查當月是否有忘卡！！'
+        item.content = '當月1~27日之出勤異動應於27日前完成，並請順便檢查當月是否有忘刷卡！！'
         MESSAGE_LIST.append(item)
 
 
