@@ -150,23 +150,22 @@ def line_notify_message(token: str, msg: str):
 
 
 if __name__ == '__main__':
-    print(get_nearest_thursday_of_each_month_of_the_year(2024))
-    # if IS_EIGTH_THIRTY_AM:
-    #     notify_meeting_day()
-    #     notify_write_weekly_report()
-    #     notify_wirte_misson_management()
-    #     notify_schedule()
-    #     notify_edit_working_hours()
-    # elif IS_TEN_AM:
-    #     notify_booking_lunch()
-    # elif IS_ONE_THIRTY_PM:
-    #     notify_write_weekly_report()
-    # elif IS_FIVE_THIRTY_PM:
-    #     notify_weekend()
-    #     notify_schedule()
-    #     notify_edit_working_hours()
-    #     notify_wirte_misson_management()
+    if IS_EIGTH_THIRTY_AM:
+        notify_meeting_day()
+        notify_write_weekly_report()
+        notify_wirte_misson_management()
+        notify_schedule()
+        notify_edit_working_hours()
+    elif IS_TEN_AM:
+        notify_booking_lunch()
+    elif IS_ONE_THIRTY_PM:
+        notify_write_weekly_report()
+    elif IS_FIVE_THIRTY_PM:
+        notify_weekend()
+        notify_schedule()
+        notify_edit_working_hours()
+        notify_wirte_misson_management()
 
-    # if MESSAGE_LIST:
-    #     token = ''
-    #     line_notify_message(token, format_message_list())
+    if MESSAGE_LIST:
+        token = ''
+        line_notify_message(token, format_message_list())
