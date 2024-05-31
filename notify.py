@@ -20,32 +20,24 @@ class MessageItem():
         self.content = content
 
 
-def get_nearest_thursday_of_month(year: int, month: int) -> str:
-    """取得每個月最接近15號的週四"""
+def get_nearest_thursday_before_or_on_15th(year: int, month: int) -> str:
+    """取得每個月最接近15號前或當天的週四"""
     fifteenth_of_month = date(year, month, 15)
+    weekday_of_fifteenth = fifteenth_of_month.weekday()
 
-    # 計算15號的前一週四和後一週四
-    prev_thursday = fifteenth_of_month - timedelta(days=fifteenth_of_month.weekday() + 3)
-    next_thursday = fifteenth_of_month + timedelta(days=3 - fifteenth_of_month.weekday())
+    # 計算最接近15號前或當天的週四
+    days_to_prev_thursday = (weekday_of_fifteenth - 3) % 7
+    nearest_thursday_before_or_on_15th = fifteenth_of_month - timedelta(days=days_to_prev_thursday)
 
-    # 比較前一週四和後一週四與15號的距離,取較近的那一天
-    prev_diff = abs((fifteenth_of_month - prev_thursday).days)
-    next_diff = abs((next_thursday - fifteenth_of_month).days)
-
-    if prev_diff < next_diff:
-        nearest_thursday_of_month = prev_thursday
-    else:
-        nearest_thursday_of_month = next_thursday
-
-    return nearest_thursday_of_month.strftime('%Y-%m-%d')
+    return nearest_thursday_before_or_on_15th.strftime('%Y-%m-%d')
 
 
 def get_nearest_thursday_of_each_month_of_the_year(year: int) -> list:
-    """取得該年度每個月最接近15號的週四"""
+    """取得該年度每個月最接近15號前或當天的週四"""
     nearest_thursday_of_each_month_of_the_year = []
 
     for month in range(1, 13):
-        nearest_thursday_of_month = get_nearest_thursday_of_month(year, month)
+        nearest_thursday_of_month = get_nearest_thursday_before_or_on_15th(year, month)
         nearest_thursday_of_each_month_of_the_year.append(nearest_thursday_of_month)
 
     return nearest_thursday_of_each_month_of_the_year
@@ -158,22 +150,23 @@ def line_notify_message(token: str, msg: str):
 
 
 if __name__ == '__main__':
-    if IS_EIGTH_THIRTY_AM:
-        notify_meeting_day()
-        notify_write_weekly_report()
-        notify_wirte_misson_management()
-        notify_schedule()
-        notify_edit_working_hours()
-    elif IS_TEN_AM:
-        notify_booking_lunch()
-    elif IS_ONE_THIRTY_PM:
-        notify_write_weekly_report()
-    elif IS_FIVE_THIRTY_PM:
-        notify_weekend()
-        notify_schedule()
-        notify_edit_working_hours()
-        notify_wirte_misson_management()
+    print(get_nearest_thursday_of_each_month_of_the_year(2024))
+    # if IS_EIGTH_THIRTY_AM:
+    #     notify_meeting_day()
+    #     notify_write_weekly_report()
+    #     notify_wirte_misson_management()
+    #     notify_schedule()
+    #     notify_edit_working_hours()
+    # elif IS_TEN_AM:
+    #     notify_booking_lunch()
+    # elif IS_ONE_THIRTY_PM:
+    #     notify_write_weekly_report()
+    # elif IS_FIVE_THIRTY_PM:
+    #     notify_weekend()
+    #     notify_schedule()
+    #     notify_edit_working_hours()
+    #     notify_wirte_misson_management()
 
-    if MESSAGE_LIST:
-        token = ''
-        line_notify_message(token, format_message_list())
+    # if MESSAGE_LIST:
+    #     token = ''
+    #     line_notify_message(token, format_message_list())
