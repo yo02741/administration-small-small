@@ -43,14 +43,6 @@ def get_nearest_thursday_of_each_month_of_the_year(year: int) -> list:
     return nearest_thursday_of_each_month_of_the_year
 
 
-def meeting_day_schedule():
-    """行政小小會議要做什麼"""
-    if (TODAY.month % 2 == 1):
-        return '工作回顧'
-    else:
-        return '技術分享'
-
-
 def notify_meeting_day():
     """行政小小會議
     每個月最接近15號的週四前兩天提醒"""
@@ -64,7 +56,7 @@ def notify_meeting_day():
         if diff == 2:
             item = MessageItem()
             item.label = '➭ 行政小小會議'
-            item.content = f'本週將於 {meeting_date} 舉行行政小小會議，若有同仁該時段有要事請提出，謝謝。\n 另外，本月將進行 {meeting_day_schedule()}，再請同仁準備！'
+            item.content = f'本月將於 {meeting_date} 舉行行政小小會議，若有同仁該時段有要事請提出，謝謝。\n 另外，記得寫『 可改變的地方/好的部份 』'
             MESSAGE_LIST.append(item)
 
 
